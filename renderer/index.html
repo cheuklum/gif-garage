@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GIF Garage</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Title bar -->
+  <div id="titlebar">
+    <div id="titlebar-drag"></div>
+    <span id="app-title">GIF GARAGE</span>
+  </div>
+
+  <!-- Main layout -->
+  <div id="app">
+
+    <!-- LEFT PANEL: File Browser -->
+    <div id="panel-left" class="panel">
+      <div id="breadcrumbs"></div>
+      <div id="file-list"></div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="panel-divider"></div>
+
+    <!-- CENTER PANEL: Preview + Trim -->
+    <div id="panel-center" class="panel">
+      <div id="video-container">
+        <div id="video-placeholder">
+          <div class="placeholder-icon">▶</div>
+          <p>Select a video</p>
+        </div>
+        <video id="preview-video" style="display:none" preload="metadata"></video>
+      </div>
+
+      <div id="trim-section">
+        <div id="trim-times">
+          <span id="trim-start-label">Start: 0:00.000</span>
+          <span id="trim-duration-label">Duration: —</span>
+          <span id="trim-end-label">End: 0:00.000</span>
+        </div>
+        <div id="timeline-container">
+          <canvas id="timeline-canvas"></canvas>
+          <div id="timeline-playhead"></div>
+        </div>
+        <div id="trim-controls">
+          <button id="btn-play-pause" class="ctrl-btn">▶</button>
+          <span id="current-time-label">0:00.000</span>
+        </div>
+      </div>
+
+      <div id="center-actions">
+        <button id="btn-send" class="action-btn" disabled>SEND TO GARAGE</button>
+      </div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="panel-divider"></div>
+
+    <!-- RIGHT PANEL: Queue -->
+    <div id="panel-right" class="panel">
+      <div id="queue-header">QUEUE</div>
+      <div id="queue-list">
+        <div id="queue-empty">No videos in queue</div>
+      </div>
+      <div id="right-actions">
+        <button id="btn-shop" class="action-btn shop-btn" disabled>SHOP'S OPEN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING OVERLAY -->
+  <div id="loading-overlay" style="display:none">
+    <canvas id="retro-canvas"></canvas>
+    <div id="loading-text">
+      <div id="loading-title">CONVERTING</div>
+      <div id="loading-file"></div>
+      <div id="loading-count"></div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
