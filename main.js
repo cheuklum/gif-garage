@@ -41,6 +41,13 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
+function datedOutputPath(outputName) {
+  const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+  const dir = path.join(GIF_GARAGE_DIR, today);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  return path.join(dir, outputName.replace(/\.[^.]+$/, '.gif'));
+}
+
 // ─── IPC Handlers ───────────────────────────────────────────
 
 ipcMain.handle('read-directory', async (event, dirPath) => {
@@ -123,7 +130,7 @@ ipcMain.handle('trim-video', async (event, { inputPath, startTime, endTime }) =>
 });
 
 ipcMain.handle('convert-to-gif', async (event, { inputPath, startTime, endTime, outputName }) => {
-  const outputPath = path.join(GIF_GARAGE_DIR, outputName.replace(/\.[^.]+$/, '.gif'));
+  const outputPath = datedOutputPath(outputName);
 
   // Resolution targets to try (in order) to stay under 50MB
   const targets = [
@@ -198,7 +205,7 @@ ipcMain.handle('convert-to-gif', async (event, { inputPath, startTime, endTime, 
 });
 
 ipcMain.handle('convert-to-gif-with-progress', async (event, { inputPath, startTime, endTime, outputName, jobId }) => {
-  const outputPath = path.join(GIF_GARAGE_DIR, outputName.replace(/\.[^.]+$/, '.gif'));
+  const outputPath = datedOutputPath(outputName);
   const targets = [
     { scale: 480, fps: 15, colors: 256 },
     { scale: 360, fps: 12, colors: 128 },
