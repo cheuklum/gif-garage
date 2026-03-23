@@ -43,9 +43,8 @@ app.on('activate', () => {
 
 function datedOutputPath(outputName) {
   const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
-  const dir = path.join(GIF_GARAGE_DIR, today);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  return path.join(dir, outputName.replace(/\.[^.]+$/, '.gif'));
+  const base = outputName.replace(/\.[^.]+$/, '.gif');
+  return path.join(GIF_GARAGE_DIR, `${today}_${base}`);
 }
 
 // ─── IPC Handlers ───────────────────────────────────────────
