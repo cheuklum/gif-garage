@@ -57,13 +57,14 @@ ipcMain.handle('read-directory', async (event, dirPath) => {
         if (VIDEO_EXTS.has(ext)) {
           const fullPath = path.join(dirPath, entry.name);
           const stat = fs.statSync(fullPath);
-          result.push({ name: entry.name, type: 'video', path: fullPath, size: stat.size });
+          result.push({ name: entry.name, type: 'video', path: fullPath, size: stat.size, mtime: stat.mtimeMs });
         }
       }
     }
+    // Return unsorted — renderer handles sort order
     result.sort((a, b) => {
       if (a.type !== b.type) return a.type === 'directory' ? -1 : 1;
-      return a.name.localeCompare(b.name);
+      return 0;
     });
     return { ok: true, entries: result };
   } catch (e) {

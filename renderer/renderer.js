@@ -9,10 +9,12 @@ let isDraggingEnd = false;
 let isDraggingPlayhead = false;
 let queue = [];
 let isConverting = false;
+let currentEntries = [];
 
 // ─── DOM refs ────────────────────────────────────────────────
 const breadcrumbsEl = document.getElementById('breadcrumbs');
 const fileListEl = document.getElementById('file-list');
+const sortSelect = document.getElementById('sort-select');
 const videoEl = document.getElementById('preview-video');
 const videoPlaceholder = document.getElementById('video-placeholder');
 const timelineCanvas = document.getElementById('timeline-canvas');
@@ -48,11 +50,32 @@ async function navigateTo(dir) {
   renderBreadcrumbs(dir);
   const result = await window.api.readDirectory(dir);
   if (result.ok) {
-    renderFileList(result.entries);
+    currentEntries = result.entries;
+    renderFileList(sortEntries(currentEntries));
   } else {
     fileListEl.innerHTML = `<div style="padding:12px;color:#555;font-size:10px;">Cannot read folder</div>`;
   }
 }
+
+function sortEntries(entries) {
+  const dirs = entries.filter(e => e.type === 'directory');
+  const files = entries.filter(e => e.type !== 'directory');
+  const order = sortSelect.value;
+  files.sort((a, b) => {
+    if (order === 'newest') return (b.mtime || 0) - (a.mtime || 0);
+    if (order === 'oldest') return (a.mtime || 0) - (b.mtime || 0);
+    if (order === 'az')     return a.name.localeCompare(b.name);
+    if (order === 'za')     return b.name.localeCompare(a.name);
+    return 0;
+  });
+  // Directories always on top, sorted A→Z
+  dirs.sort((a, b) => a.name.localeCompare(b.name));
+  return [...dirs, ...files];
+}
+
+sortSelect.addEventListener('change', () => {
+  if (currentEntries.length > 0) renderFileList(sortEntries(currentEntries));
+});
 
 function renderBreadcrumbs(dir) {
   const parts = dir.split('/').filter(Boolean);
