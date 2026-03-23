@@ -44,7 +44,7 @@ app.on('activate', () => {
 // ─── IPC Handlers ───────────────────────────────────────────
 
 ipcMain.handle('read-directory', async (event, dirPath) => {
-  const VIDEO_EXTS = new Set(['.mp4', '.mov', '.avi', '.mkv', '.webm', '.m4v', '.wmv', '.flv', '.ts', '.mts']);
+  const VIDEO_EXTS = new Set(['.mp4', '.mov', '.avi', '.mkv', '.webm', '.m4v', '.wmv', '.flv', '.mpg', '.mpeg', '.3gp']);
   try {
     const entries = fs.readdirSync(dirPath, { withFileTypes: true });
     const result = [];
